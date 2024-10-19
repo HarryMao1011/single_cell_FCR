@@ -1,16 +1,12 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: linux-64
-python=3.9
+python=3.10
 
-tqdm=4.63.2
 numpy=1.23.5
 gensim=3.8.3
 pandas=1.4.4
-scanpy=1.9.2
-seaborn=0.11.2
-networkx=2.8.3
-ipykernel=6.15.3
-ipywidgets=8.0.4
+scanpy=1.10.3
+ipykernel=6.29.2
 matplotlib=3.6.3
 scikit-learn=1.0.2

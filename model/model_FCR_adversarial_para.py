@@ -643,8 +643,6 @@ class FCR(nn.Module):
     
     
     
-    
-    
     def permutation_samples_X(self, mu: torch.Tensor, sigma: torch.Tensor, size=1):
         
         sample1 = self.sample_latent(mu, sigma, size)
@@ -1025,7 +1023,6 @@ class FCR(nn.Module):
         ## estimation latents for experiments
         
         
-        
         ZX_constr = self.encode_ZX(outcomes, covariates)
         ZX_dist = self.distributionize(
             ZX_constr, dim=self.hparams["ZX_dim"], dist="normal"
@@ -1079,32 +1076,35 @@ class FCR(nn.Module):
       
         
         ## p(x|ZX)
-        ZX_resample = self.sample_latent(ZX[0], ZX[1])
+        ZX_resample = self.sample_latent(ZX_constr[0], ZX_constr[1])
         cov_inputs =ZX_resample
         cov_constr = self.covariate_decode(cov_inputs)
- 
-        ## p(t | ZT, control_latent_constr)
-        # ZT_resample = self.sample_latent(ZT[0], ZT[1])
-        # Z_control_resample = self.sample_latent(control_latents_dist.mean, control_latents_dist.stddev)        
-        # treatment_constr = self.intervention_decode(ZT_resample, Z_control_resample)
+
         
         
-        ZT_resample = self.sample_latent(ZT[0], ZT[1])
-        ZXT_resample = self.sample_latent(ZXT[0], ZXT[1])
+        ZT_resample = self.sample_latent(ZT_constr[0], ZT_constr[1])
+        ZXT_resample = self.sample_latent(ZXT_constr[0], ZXT_constr[1])
         ZTs = torch.cat([ZT_resample, ZXT_resample], dim=1)
-        ZT_control_resample = self.sample_latent(ZT_control[0], ZT_control[1])
-        ZXT_control_resample = self.sample_latent(ZXT_control[0], ZXT_control[1])
+        ZT_control_resample = self.sample_latent(ZT_control_constr[0], ZT_control_constr[1])
+        ZXT_control_resample = self.sample_latent(ZXT_control_constr[0], ZXT_control_constr[1])
         ZTs_control = torch.cat([ZT_control_resample, ZXT_control_resample], dim=1)
         treatment_constr = self.intervention_decode(ZTs, ZTs_control)
+
+        control_latents_dist_mean = torch.cat([ZT_control_dist.mean, ZXT_control_dist.mean, ZT_control_dist.mean], dim=1)
+        control_latents_dist_stddev = torch.cat([ZT_control_dist.stddev, ZXT_control_dist.stddev, ZT_control_dist.stddev], dim=1)
         
-        control_outcomes_constr_samp = self.sample_expr(control_latents_dist.mean, control_latents_dist.stddev, size=self.mc_sample_size
+        control_outcomes_constr_samp = self.sample_expr(control_latents_dist_mean, control_latents_dist_stddev, size=self.mc_sample_size
         )
         control_outcomes_dist_samp = self.distributionize(control_outcomes_constr_samp)
+
+        exp_latents_dist_mean = torch.cat([ZX_dist.mean, ZXT_dist.mean, ZT_dist.mean], dim=1)
+        exp_latents_dist_stddev = torch.cat([ZX_dist.stddev, ZXT_dist.stddev, ZT_dist.stddev], dim=1)
+        exp_dist = self.distributionize(exp_latents_dist_stddev)
         
-        expr_outcomes_constr_samp = self.sample_expr(exp_dist.mean, exp_dist.stddev, size=self.mc_sample_size)
+        expr_outcomes_constr_samp = self.sample_expr(exp_latents_dist_mean, exp_latents_dist_stddev, size=self.mc_sample_size)
         expr_outcomes_dist_samp = self.distributionize(expr_outcomes_constr_samp)
 
-        results = [control_outcomes_dist_samp,expr_outcomes_dist_samp, exp_dist, ZX, ZT, ZXT, ZX_prior_dist, ZT_prior_dist,ZXT_prior_dist,\
+        results = [control_outcomes_dist_samp,expr_outcomes_dist_samp, exp_dist, ZX_constr, ZT_constr, ZXT_constr, ZX_prior_dist, ZT_prior_dist,ZXT_prior_dist,\
                   control_latents_dist, control_prior_dist,cov_constr, treatment_constr]      
             
         return results
@@ -1309,7 +1309,7 @@ class FCR(nn.Module):
             heads=2, final_act="relu"
         )
     
-     def init_encoder_X(self):
+    def init_encoder_X(self):
         return MLP([self.outcome_dim+self.covariate_dim]
             + [self.hparams["encoder_width"]] * (self.hparams["encoder_depth"] - 1)
             + [self.hparams["ZX_dim"]],
