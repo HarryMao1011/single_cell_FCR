@@ -45,6 +45,10 @@ python main.py
 python main_numerical --evaluate
 ```
 
+## License
+Distributed under the MIT License. See LICENSE.txt for more information.
+
+
 
 <!-- ## Multimodal Experiment
 
