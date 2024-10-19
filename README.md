@@ -71,7 +71,7 @@ This implementation is built upon [multimodal-contrastive-learning](https://gith
 
 ## BibTex
 
-```bibtex
+<!-- ```bibtex
 @inproceedings{
     yao2024multiview,
     title={Multi-View Causal Representation Learning with Partial Observability},
@@ -80,4 +80,4 @@ This implementation is built upon [multimodal-contrastive-learning](https://gith
     year={2024},
     url={https://openreview.net/forum?id=OGtnhKQJms}
 }
-```
+``` -->
