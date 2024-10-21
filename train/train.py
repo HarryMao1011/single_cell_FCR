@@ -11,7 +11,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 from ..evaluate.evaluate import evaluate, evaluate_classic,evaluate_prediction
 
-from ..model.model_FCR_adversarial import load_FCR
+from ..model import load_FCR
 
 
 from ..dataset.dataset import load_dataset_splits,load_dataset_train_test
