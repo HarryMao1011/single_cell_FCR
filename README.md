@@ -33,8 +33,9 @@ conda activate fcr-env
 
 
 ## Data Availability
-sciPlex: https://www.science.org/doi/10.1126/science.aax6234
-multiPlex: https://www.nature.com/articles/s41467-020-17440-w
+
+### sciPlex: https://www.science.org/doi/10.1126/science.aax6234
+### multiPlex: https://www.nature.com/articles/s41467-020-17440-w
 
 
 ## Run
