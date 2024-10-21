@@ -11,7 +11,7 @@
 Official code for the NeurIPS 2024 paper [ Learning Identifiable Factorized Causal Representations of Cellular Responses](https://openreview.net/forum?id=AhlaBDHMQh). This work was performed by
 [Haiyi Mao](https://harrymao1011.github.io/),
 [Romain Lopez](https://romain-lopez.github.io/),
-[Kai liu](),
+[Kai Liu](),
 [Panayiotis (Takis) Benos](),
 [Qiu Lin](https://lquvatexas.github.io/),
 Please [cite us](#bibtex) when making use of our code or ideas.
@@ -39,11 +39,9 @@ sciPlex:
 ## Run
 ```shell
 # train
-python main.py
-
-# evaluate
-python main_numerical --evaluate
+./main.sh 
 ```
+
 
 ## License
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)  
